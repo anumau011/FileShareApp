@@ -21,8 +21,8 @@ A Flask-based secure file sharing system that supports operations and client use
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/secure-file-sharing.git
-cd secure-file-sharing
+https://github.com/anumau011/FileShareApp.git
+cd FileShareApp
 ```
 ### 2. Install Dependencies
 ```
@@ -160,17 +160,12 @@ GET /download-file/<secure_token>
 Headers: Authorization: Bearer <access_token>
 ```
 
-# 🛡️ Security Features
-### 🔐 JWT Authentication
+## 🛡️ Security Features
 
-### 👤 Role-based Access (Ops, Client)
-
-### ✉️ Email Verification
-
-### 🔗 Secure, Time-limited Download Tokens
-
-### 📁 File Type Whitelisting
-
-### 🧮 MD5 File Integrity Check
-
-### 🔒 Password Hashing (Werkzeug)
+🔐 JWT Authentication
+👤 Role-based Access (Ops, Client)
+✉️ Email Verification
+🔗 Secure, Time-limited Download Tokens
+📁 File Type Whitelisting
+🧮 MD5 File Integrity Check
+🔒 Password Hashing (Werkzeug)
