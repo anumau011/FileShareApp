@@ -1,10 +1,15 @@
-from flask import Blueprint, request, jsonify, current_app
+from flask import Blueprint, request, jsonify, current_app, url_for
 from flask_jwt_extended import create_access_token
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timezone
 from bson.objectid import ObjectId
 from utils.helpers import generate_secure_token
-from utils.email_service import send_verification_email, get_serializer
+from utils.email_service import send_verification_email
+from itsdangerous import URLSafeTimedSerializer
+
+def get_serializer():
+    """Get URL safe serializer"""
+    return URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -52,7 +57,8 @@ def client_signup():
         
         # Generate verification token
         verification_token = generate_secure_token()
-        
+        serializer = get_serializer()
+
         # Create user document
         user_doc = {
             'email': email,
@@ -65,11 +71,17 @@ def client_signup():
         }
         
         result = current_app.mongo.db.users.insert_one(user_doc)
-        
+        encrypted_data = serializer.dumps(
+            {'user_id': str(result.inserted_id), 
+             'token': verification_token
+             })
+
         # Send verification email
-        if send_verification_email(email, str(result.inserted_id), verification_token):
+        if send_verification_email(email, encrypted_data):
             return jsonify({
-                'message': 'User registered successfully. Please check your email for verification.'
+                'message': 'User registered successfully. Please check your email for verification.',
+                'verification link': url_for('auth.verify_email', token=encrypted_data, _external=True),
+                "verification_token": encrypted_data
             }), 201
         else:
             return jsonify({'error': 'Failed to send verification email'}), 500

@@ -33,3 +33,15 @@ def client_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def admin_required(f):
+    """Decorator to require admin user access"""
+    @wraps(f)
+    @jwt_required()
+    def decorated_function(*args, **kwargs):
+        if current_app.mongo is None:
+            return jsonify({'error': 'Database connection not available'}), 500
+        
+        current_user_id = get_jwt_identity()
+        user = current_app.mongo.db.users.find_one({'_id': ObjectId(current_user_id)})
+        return f(*args, **kwargs)
+    return decorated_function

@@ -1,17 +1,10 @@
 from flask import current_app, url_for
 from flask_mail import Message
-from itsdangerous import URLSafeTimedSerializer
 
-def get_serializer():
-    """Get URL safe serializer"""
-    return URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-
-def send_verification_email(email, user_id, token):
+def send_verification_email(email, encrypted_data):
     """Send email verification"""
     try:
-        serializer = get_serializer()
         # Create encrypted token for email
-        encrypted_data = serializer.dumps({'user_id': user_id, 'token': token})
         verification_url = url_for('auth.verify_email', token=encrypted_data, _external=True)
         
         msg = Message(

@@ -14,6 +14,7 @@ def upload_file():
     """Upload file - Only for operations users"""
     try:
         if 'file' not in request.files:
+            print("breaked here")
             return jsonify({'error': 'No file provided'}), 400
         
         file = request.files['file']

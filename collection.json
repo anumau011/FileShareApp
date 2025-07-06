@@ -1,0 +1,477 @@
+{
+	"info": {
+		"_postman_id": "198a0c89-01a6-4895-83b1-4d6cbf39b3f8",
+		"name": "Secure File Share App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37688741"
+	},
+	"item": [
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "POST admin/login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var asses_token = pm.response.json().access_token;\r",
+											"pm.collectionVariables.set(\"admin_access_token\", asses_token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{admin_user}}\",\r\n    \"password\": \"{{admin_pass}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url_base}}/admin/login",
+									"host": [
+										"{{url_base}}"
+									],
+									"path": [
+										"admin",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "No Auth",
+					"item": [
+						{
+							"name": "POST /admin/create-ops-user",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{admin_access_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{opt-email}}\",\r\n    \"password\": \"{{opt-password}}\",\r\n    \"name\": \"Dummy User\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url_base}}/admin/create-ops-user",
+									"host": [
+										"{{url_base}}"
+									],
+									"path": [
+										"admin",
+										"create-ops-user"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Operator",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "POST /ops/login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var opt_token = pm.response.json().access_token; \r",
+											"pm.collectionVariables.set(\"opt_token\", opt_token); "
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\":\"{{opt-email}}\",\r\n    \"password\" : \"{{opt-password}}\"   \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url_base}}/ops/login",
+									"host": [
+										"{{url_base}}"
+									],
+									"path": [
+										"ops",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "No Auth",
+					"item": [
+						{
+							"name": "POST",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{opt_token}}",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"contentType": "multipart/form-data",
+											"type": "file",
+											"src": "postman-cloud:///1f059d56-04d4-4c30-98c2-9bb4bf317135"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url_base}}/ops/upload",
+									"host": [
+										"{{url_base}}"
+									],
+									"path": [
+										"ops",
+										"upload"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Client",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "POST /client/signup",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var client_varification_token = pm.response.json().verification_token;\r",
+											"pm.collectionVariables.set(\"client_varification_token\", client_varification_token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{client_email}}\",\r\n    \"password\": \"{{opt-password}}\",\r\n    \"name\":\"Abhi Kam\"\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url_base}}/client/signup",
+									"host": [
+										"{{url_base}}"
+									],
+									"path": [
+										"client",
+										"signup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET /client/verify-email/:token",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url_base}}/client/verify-email/{{client_varification_token}}",
+									"host": [
+										"{{url_base}}"
+									],
+									"path": [
+										"client",
+										"verify-email",
+										"{{client_varification_token}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "POST /client/login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var access_token = pm.response.json().access_token;\r",
+											"pm.collectionVariables.set(\"client_access_token\", access_token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{client_email}}\",\r\n    \"password\": \"{{opt-password}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url_base}}/client/login",
+									"host": [
+										"{{url_base}}"
+									],
+									"path": [
+										"client",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "No auth",
+					"item": [
+						{
+							"name": "GET /client/files",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var file_id = pm.response.json().files[0]._id; // Assuming the first file's ID is what we need\r",
+											"pm.collectionVariables.set(\"file_id\", file_id); // Store the file ID in the environment variable"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{client_access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url_base}}/client/files",
+									"host": [
+										"{{url_base}}"
+									],
+									"path": [
+										"client",
+										"files"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET /client/download-file/:file_id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{client_access_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url_base}}/client/download-file/{{file_id}}",
+									"host": [
+										"{{url_base}}"
+									],
+									"path": [
+										"client",
+										"download-file",
+										"{{file_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url_base",
+			"value": "http://127.0.0.1:5000",
+			"type": "string"
+		},
+		{
+			"key": "opt-email",
+			"value": "dummy@example.com",
+			"type": "default"
+		},
+		{
+			"key": "opt-password",
+			"value": "dummyPassword123",
+			"type": "default"
+		},
+		{
+			"key": "client_email",
+			"value": "abhikam07@outlook.com",
+			"type": "default"
+		},
+		{
+			"key": "admin_user",
+			"value": "admin@admin",
+			"type": "default"
+		},
+		{
+			"key": "admin_pass",
+			"value": "Maurya456@",
+			"type": "default"
+		},
+		{
+			"key": "admin_pass",
+			"value": ""
+		},
+		{
+			"key": "admin_access_token",
+			"value": ""
+		},
+		{
+			"key": "opt_token",
+			"value": ""
+		},
+		{
+			"key": "client_varification_token",
+			"value": ""
+		},
+		{
+			"key": "client_access_token",
+			"value": ""
+		},
+		{
+			"key": "file_id",
+			"value": ""
+		}
+	]
+}
