@@ -31,7 +31,7 @@ pip install -r requirements.txt
 ```
 ## 🎥 Demo
 
-[![Watch the demo](https://github.com/anumau011/FileShareApp/blob/main/demo/demo_api_testing.mp4)]
+[![Demo Video](demo/thumbnail.png)](https://raw.githubusercontent.com/anumau011/FileShareApp/main/demo/demo_api_testing.mp4)
 
 ### 3. Environment Configuration
 
